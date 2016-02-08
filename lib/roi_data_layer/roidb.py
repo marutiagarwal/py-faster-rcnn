@@ -55,8 +55,7 @@ def add_bbox_regression_targets(roidb):
         rois = roidb[im_i]['boxes']
         max_overlaps = roidb[im_i]['max_overlaps']
         max_classes = roidb[im_i]['max_classes']
-        roidb[im_i]['bbox_targets'] = \
-                _compute_targets(rois, max_overlaps, max_classes)
+        roidb[im_i]['bbox_targets'] = _compute_targets(rois, max_overlaps, max_classes)
 
     if cfg.TRAIN.BBOX_NORMALIZE_TARGETS_PRECOMPUTED:
         # Use fixed / precomputed "means" and "stds" instead of empirical values
