@@ -118,13 +118,19 @@ def _compute_targets(rois, overlaps, labels):
         np.ascontiguousarray(rois[ex_inds, :], dtype=np.float),
         np.ascontiguousarray(rois[gt_inds, :], dtype=np.float))
 
+    targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
+
+    # No gt or no overlaps above threshold
+    if len(ex_gt_overlaps) == 0:
+        return targets
+
     # Find which gt ROI each ex ROI has max overlap with:
     # this will be the ex ROI's gt target
     gt_assignment = ex_gt_overlaps.argmax(axis=1)
     gt_rois = rois[gt_inds[gt_assignment], :]
     ex_rois = rois[ex_inds, :]
 
-    targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
+    # targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
     targets[ex_inds, 0] = labels[ex_inds]
     targets[ex_inds, 1:] = bbox_transform(ex_rois, gt_rois)
     return targets
