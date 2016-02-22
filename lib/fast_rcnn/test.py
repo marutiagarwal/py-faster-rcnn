@@ -170,7 +170,7 @@ def im_detect(net, im, boxes=None):
 
     if cfg.TEST.BBOX_REG:
         # Apply bounding-box regression deltas
-        box_deltas = blobs_out['bbox_pred']
+        box_deltas = blobs_out['bbox_pred_1']
         pred_boxes = bbox_transform_inv(boxes, box_deltas)
         pred_boxes = clip_boxes(pred_boxes, im.shape)
     else:
@@ -249,7 +249,7 @@ def im_detect_feature(net, im, feat_layer_name, boxes=None):
 
     if cfg.TEST.BBOX_REG:
         # Apply bounding-box regression deltas
-        box_deltas = blobs_out['bbox_pred']
+        box_deltas = blobs_out['bbox_pred_1']
         pred_boxes = bbox_transform_inv(boxes, box_deltas)
         pred_boxes = clip_boxes(pred_boxes, im.shape)
     else:
@@ -261,7 +261,7 @@ def im_detect_feature(net, im, feat_layer_name, boxes=None):
         scores = scores[inv_index, :]
         pred_boxes = pred_boxes[inv_index, :]
 
-    feature = blobs_out[feat_layer_name]
+    feature = net.blobs[feat_layer_name].data.copy()
     return scores, pred_boxes, feature
 
 def vis_detections(im, class_name, dets, thresh=0.3):
