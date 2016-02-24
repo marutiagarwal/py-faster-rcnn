@@ -49,6 +49,13 @@ class AnchorTargetLayer(caffe.Layer):
         self._allowed_border = layer_params.get('allowed_border', 0)
 
         height, width = bottom[0].data.shape[-2:]
+        while (width/float(height)<0.117):
+            width += 1
+            print 'anchor_target_layer: increased width by 1.'
+        while (width/float(height)>15.5):
+            height += 1
+            print 'anchor_target_layer: increased height by 1.'
+
         if DEBUG:
             print 'AnchorTargetLayer: height', height, 'width', width
 
@@ -76,10 +83,19 @@ class AnchorTargetLayer(caffe.Layer):
 
         # map of shape (..., H, W)
         height, width = bottom[0].data.shape[-2:]
+        print 'height = ',height,', width = ',width
+        while (width/float(height)<0.117):
+            width += 1
+            print 'anchor_target_layer: increased width by 1.'
+        while (width/float(height)>15.5):
+            height += 1
+            print 'anchor_target_layer: increased height by 1.'
+
         # GT boxes (x1, y1, x2, y2, label)
         gt_boxes = bottom[1].data
         # im_info
         im_info = bottom[2].data[0, :]
+        print 'im_info = ',im_info
 
         if 0 and DEBUG:
             print ''
